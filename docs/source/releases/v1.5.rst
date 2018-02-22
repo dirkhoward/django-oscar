@@ -2,7 +2,7 @@
 Oscar 1.5 release notes
 =======================
 
-:release: tbd
+:release: 2017-08-10
 
 Welcome to Oscar 1.5
 
@@ -149,7 +149,6 @@ Backwards incompatible changes in Oscar 1.5
 
  - ``oscar.forms.fields.ExtendedURLField`` no longer accepts a ``verify_exists``
    argument.
-
 
 Dependency changes
 ------------------

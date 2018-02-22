@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 OSCAR_SHOP_NAME = 'Oscar'
@@ -52,14 +52,6 @@ OSCAR_DASHBOARD_ITEMS_PER_PAGE = 20
 OSCAR_ALLOW_ANON_CHECKOUT = False
 
 # Promotions
-COUNTDOWN, LIST, SINGLE_PRODUCT, TABBED_BLOCK = (
-    'Countdown', 'List', 'SingleProduct', 'TabbedBlock')
-OSCAR_PROMOTION_MERCHANDISING_BLOCK_TYPES = (
-    (COUNTDOWN, "Vertical list"),
-    (LIST, "Horizontal list"),
-    (TABBED_BLOCK, "Tabbed block"),
-    (SINGLE_PRODUCT, "Single product"),
-)
 OSCAR_PROMOTION_POSITIONS = (('page', 'Page'),
                              ('right', 'Right-hand sidebar'),
                              ('left', 'Left-hand sidebar'))

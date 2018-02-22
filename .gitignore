@@ -22,11 +22,13 @@ __pycache__
 .pydevproject
 .settings
 .idea
+.vscode
 
 # Docs
 /docs/build/*
 *.pdf
 TODO
+venv-docs
 
 # Test files
 .coverage

@@ -5,7 +5,7 @@ from treebeard.forms import movenodeform_factory
 
 from oscar.core.loading import get_class, get_model
 from oscar.core.utils import slugify
-from oscar.forms.widgets import ImageInput, DateTimePickerInput
+from oscar.forms.widgets import DateTimePickerInput, ImageInput
 
 Product = get_model('catalogue', 'Product')
 ProductClass = get_model('catalogue', 'ProductClass')
@@ -15,7 +15,11 @@ StockRecord = get_model('partner', 'StockRecord')
 ProductCategory = get_model('catalogue', 'ProductCategory')
 ProductImage = get_model('catalogue', 'ProductImage')
 ProductRecommendation = get_model('catalogue', 'ProductRecommendation')
+AttributeOptionGroup = get_model('catalogue', 'AttributeOptionGroup')
+AttributeOption = get_model('catalogue', 'AttributeOption')
 ProductSelect = get_class('dashboard.catalogue.widgets', 'ProductSelect')
+RelatedFieldWidgetWrapper = get_class('dashboard.widgets',
+                                      'RelatedFieldWidgetWrapper')
 
 CategoryForm = movenodeform_factory(
     Category,
@@ -323,10 +327,6 @@ class ProductRecommendationForm(forms.ModelForm):
             'recommendation': ProductSelect,
         }
 
-    def __init__(self, *args, **kwargs):
-        super(ProductRecommendationForm, self).__init__(*args, **kwargs)
-        self.fields['recommendation'].widget.attrs['class'] = "select2"
-
 
 class ProductClassForm(forms.ModelForm):
 
@@ -346,6 +346,10 @@ class ProductAttributesForm(forms.ModelForm):
 
         self.fields["option_group"].help_text = _("Select an option group")
 
+        remote_field = self._meta.model._meta.get_field('option_group').remote_field
+        self.fields["option_group"].widget = RelatedFieldWidgetWrapper(
+            self.fields["option_group"].widget, remote_field)
+
     def clean_code(self):
         code = self.cleaned_data.get("code")
         title = self.cleaned_data.get("name")
@@ -359,3 +363,16 @@ class ProductAttributesForm(forms.ModelForm):
         model = ProductAttribute
         fields = ["name", "code", "type", "option_group", "required"]
 
+
+class AttributeOptionGroupForm(forms.ModelForm):
+
+    class Meta:
+        model = AttributeOptionGroup
+        fields = ['name']
+
+
+class AttributeOptionForm(forms.ModelForm):
+
+    class Meta:
+        model = AttributeOption
+        fields = ['option']

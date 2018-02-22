@@ -10,15 +10,15 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
+
+from oscar.apps.order.signals import (
+    order_line_status_changed, order_status_changed)
 from oscar.core.compat import AUTH_USER_MODEL
 from oscar.core.loading import get_model
 from oscar.core.utils import get_default_currency
 from oscar.models.fields import AutoSlugField
-from oscar.core.loading import get_class
-from . import exceptions
 
-order_status_changed = get_class('order.signals', 'order_status_changed')
-order_line_status_changed = get_class('order.signals', 'order_line_status_changed')
+from . import exceptions
 
 
 @python_2_unicode_compatible
@@ -480,8 +480,10 @@ class AbstractLine(models.Model):
 
     # Price information (these fields are actually redundant as the information
     # can be calculated from the LinePrice models
+    # Deprecated - will be removed in Oscar 2.0
     line_price_incl_tax = models.DecimalField(
         _("Price (inc. tax)"), decimal_places=2, max_digits=12)
+    # Deprecated - will be removed in Oscar 2.0
     line_price_excl_tax = models.DecimalField(
         _("Price (excl. tax)"), decimal_places=2, max_digits=12)
 
@@ -493,8 +495,7 @@ class AbstractLine(models.Model):
         _("Price before discounts (excl. tax)"),
         decimal_places=2, max_digits=12)
 
-    # Cost price (the price charged by the fulfilment partner for this
-    # product).
+    # Deprecated - will be removed in Oscar 2.0
     unit_cost_price = models.DecimalField(
         _("Unit Cost Price"), decimal_places=2, max_digits=12, blank=True,
         null=True)
@@ -505,7 +506,7 @@ class AbstractLine(models.Model):
     unit_price_excl_tax = models.DecimalField(
         _("Unit Price (excl. tax)"), decimal_places=2, max_digits=12,
         blank=True, null=True)
-    # Retail price at time of purchase
+    # Deprecated - will be removed in Oscar 2.0
     unit_retail_price = models.DecimalField(
         _("Unit Retail Price"), decimal_places=2, max_digits=12,
         blank=True, null=True)
@@ -514,7 +515,7 @@ class AbstractLine(models.Model):
     # own business processes.
     status = models.CharField(_("Status"), max_length=255, blank=True)
 
-    # Estimated dispatch date - should be set at order time
+    # Deprecated - will be removed in Oscar 2.0
     est_dispatch_date = models.DateField(
         _("Estimated Dispatch Date"), blank=True, null=True)
 

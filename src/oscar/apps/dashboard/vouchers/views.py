@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
@@ -84,6 +84,11 @@ class VoucherCreateView(generic.FormView):
         ctx['title'] = _('Create voucher')
         return ctx
 
+    def get_initial(self):
+        return dict(
+            exclusive=True
+        )
+
     @transaction.atomic()
     def form_valid(self, form):
         # Create offer and benefit
@@ -103,6 +108,7 @@ class VoucherCreateView(generic.FormView):
             offer_type=ConditionalOffer.VOUCHER,
             benefit=benefit,
             condition=condition,
+            exclusive=form.cleaned_data['exclusive'],
         )
         voucher = Voucher.objects.create(
             name=name,
@@ -166,6 +172,7 @@ class VoucherUpdateView(generic.FormView):
             'benefit_type': benefit.type,
             'benefit_range': benefit.range,
             'benefit_value': benefit.value,
+            'exclusive': offer.exclusive,
         }
 
     @transaction.atomic()
@@ -181,6 +188,9 @@ class VoucherUpdateView(generic.FormView):
         offer = voucher.offers.all()[0]
         offer.condition.range = form.cleaned_data['benefit_range']
         offer.condition.save()
+
+        offer.exclusive = form.cleaned_data['exclusive']
+        offer.save()
 
         benefit = voucher.benefit
         benefit.range = form.cleaned_data['benefit_range']

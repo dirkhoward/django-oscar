@@ -1,7 +1,9 @@
 from django.utils import six
 from django.db import models
-from oscar.models.fields import AutoSlugField
+
+from oscar.apps.address.models import UserAddress
 from oscar.apps.offer.models import Benefit, Condition
+from oscar.models.fields import AutoSlugField
 
 
 class SluggedTestModel(models.Model):
@@ -35,7 +37,13 @@ class BasketOwnerCalledBarry(Condition):
         return False
 
 
-class CustomBenefitModel(Benefit):
+class BaseOfferModel(models.Model):
+    class Meta:
+        abstract = True
+        app_label = 'tests'
+
+
+class CustomBenefitModel(BaseOfferModel, Benefit):
 
     name = 'Test benefit'
 
@@ -49,3 +57,48 @@ class CustomBenefitModel(Benefit):
     @property
     def description(self):
         return self.name
+
+
+class CustomConditionModel(Condition):
+
+    name = 'Test condition'
+
+    class Meta:
+        proxy = True
+        app_label = 'tests'
+
+    def is_satisfied(self, offer, basket):
+        return True
+
+    def can_apply_condition(self, product):
+        return True
+
+
+class CustomBenefitWithoutName(Benefit):
+    class Meta:
+        proxy = True
+        app_label = 'tests'
+
+    description = 'test'
+
+
+class CustomConditionWithoutName(Condition):
+    class Meta:
+        proxy = True
+        app_label = 'tests'
+
+
+class UserAddressModelWithCustomBaseFields(UserAddress):
+    class Meta:
+        proxy = True
+        app_label = 'tests'
+
+    base_fields = ['line1', 'line4']
+
+
+class UserAddressModelWithCustomHashFields(UserAddress):
+    class Meta:
+        proxy = True
+        app_label = 'tests'
+
+    hash_fields = ['line1', 'line4']

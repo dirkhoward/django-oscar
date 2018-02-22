@@ -13,18 +13,22 @@ StockRecord = get_model('partner', 'StockRecord')
 ProductCategory = get_model('catalogue', 'ProductCategory')
 ProductImage = get_model('catalogue', 'ProductImage')
 ProductRecommendation = get_model('catalogue', 'ProductRecommendation')
+AttributeOptionGroup = get_model('catalogue', 'AttributeOptionGroup')
+AttributeOption = get_model('catalogue', 'AttributeOption')
 
 (StockRecordForm,
  ProductCategoryForm,
  ProductImageForm,
  ProductRecommendationForm,
- ProductAttributesForm) = \
+ ProductAttributesForm,
+ AttributeOptionForm) = \
     get_classes('dashboard.catalogue.forms',
                 ('StockRecordForm',
                  'ProductCategoryForm',
                  'ProductImageForm',
                  'ProductRecommendationForm',
-                 'ProductAttributesForm'))
+                 'ProductAttributesForm',
+                 'AttributeOptionForm'))
 
 
 BaseStockRecordFormSet = inlineformset_factory(
@@ -124,6 +128,7 @@ class ProductCategoryFormSet(BaseProductCategoryFormSet):
                 num_categories += 1
         return num_categories
 
+
 BaseProductImageFormSet = inlineformset_factory(
     Product, ProductImage, form=ProductImageForm, extra=2)
 
@@ -149,3 +154,9 @@ ProductAttributesFormSet = inlineformset_factory(ProductClass,
                                                  ProductAttribute,
                                                  form=ProductAttributesForm,
                                                  extra=3)
+
+
+AttributeOptionFormSet = inlineformset_factory(AttributeOptionGroup,
+                                               AttributeOption,
+                                               form=AttributeOptionForm,
+                                               extra=3)

@@ -87,12 +87,6 @@ context processors.
         },
     ]
 
-.. attention::
-
-   Before Django 1.8 this setting was split between
-   ``TEMPLATE_CONTEXT_PROCESSORS`` and ``TEMPLATE_DIRS``.
-
-
 Next, modify ``INSTALLED_APPS`` to be a list, add ``django.contrib.sites``,
 ``django.contrib.flatpages``, and ``widget_tweaks`` and append
 Oscar's core apps. Also set ``SITE_ID``:
@@ -133,17 +127,15 @@ More info about installing ``flatpages`` is in the `Django docs`_.
 
 Next, add ``oscar.apps.basket.middleware.BasketMiddleware`` and
 ``django.contrib.flatpages.middleware.FlatpageFallbackMiddleware`` to
-your ``MIDDLEWARE_CLASSES`` setting.
+your ``MIDDLEWARE`` setting.
 
 .. code-block:: django
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = (
         ...
         'oscar.apps.basket.middleware.BasketMiddleware',
         'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     )
-
-Note: In django 1.10 and above: make sure to replace ``MIDDLEWARE`` with ``MIDDLEWARE_CLASSES``
 
 Set your auth backends to:
 
@@ -164,7 +156,7 @@ files from a remote storage (e.g. Amazon S3), you must manually copy a
 :ref:`"Image not found" image <missing-image-label>` into ``MEDIA_ROOT``.
 
 .. _`configured correctly`: https://docs.djangoproject.com/en/stable/howto/static-files/
-.. _sandbox settings: https://github.com/django-oscar/django-oscar/blob/3a5160a86c9b14c940c76a224a28cd37dd29f7f1/sites/sandbox/settings.py#L99
+.. _sandbox settings: https://github.com/django-oscar/django-oscar/blob/master/sandbox/settings.py#L102
 
 
 URLs
